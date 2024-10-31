@@ -1,14 +1,14 @@
 #include <iostream>
-#include "Tree.h"
+#include "Tree/Tree.h"
 
 using namespace std;
 
 int main() {
   Node* node1 = new Node(1, 2, 3);
-  // Node* node2 = new Node(5, 6, 7);
-  // Node* root = new Node(4, node1, nullptr);
+  Node* node2 = new Node(5, 6, 7);
+  Node* root = new Node(4, node1, node2);
 
-  BinaryTree tree(node1);
+  BinaryTree tree(root);
   cout << tree << endl;
 
   int item;
