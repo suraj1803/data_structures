@@ -70,9 +70,21 @@ class BinaryTree{
       return node;
     }
 
+    Node* subTreeLast(Node* node) {
+      if (node == nullptr) {
+        return nullptr;
+      }
+      if (node->hasRightChild()) {
+        while (!(node->isLeaf())) {
+          node = node->right;
+        }
+      }
+      return node;
+    }
+
 
     Node* successor(Node* node) {
-      if (node == nullptr || node->isLeaf()) {
+      if (node == nullptr) {
         return nullptr;
       }
       if (node->hasRightChild()) { 
@@ -80,6 +92,26 @@ class BinaryTree{
       } else {
         while(node != node->parent->left) {
           node = node->parent;
+          if (node->parent == nullptr) {
+            return nullptr;
+          }
+        }
+        return node->parent;
+      }
+    }
+
+    Node* predecessor(Node* node) {
+      if (node == nullptr) {
+        return nullptr;
+      }
+      if (node->hasLeftChild()) {
+        return subTreeLast(node->left);
+      } else {
+        while (node != node->parent->right) {
+          node = node -> parent;
+          if (node -> parent == nullptr) {
+            return nullptr;
+          }
         }
         return node->parent;
       }
@@ -87,6 +119,14 @@ class BinaryTree{
 
     Node* findItem(int item) {
       return findItem(root, item);
+    }
+
+    bool hasPredecessor(Node* node) {
+      return predecessor(node) != nullptr;
+    }
+
+    bool hasSuccessor(Node* node) {
+      return successor(root) != nullptr;
     }
 
     friend ostream& operator<<(ostream& out,const BinaryTree& tree);
