@@ -46,5 +46,20 @@ int main() {
     }
   }
 
+  cout << "Enter a item to insert after root: ";
+  cin >> item;
+  Node* newNode = new Node(item);
+  tree.insertAfter(root, newNode);
+  cout << "Inserted " << item << " after " << root->item << endl;
+  cout << tree << endl;
+
+  cout << "Enter a item to insert before root: ";
+  cin >> item;
+  newNode = new Node(item);
+  tree.insertBefore(root, newNode);
+  cout << "Inserted " << item << " before " << root->item << endl;
+  cout << tree << endl;
+
+
   return 0;
 }

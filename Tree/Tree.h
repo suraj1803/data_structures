@@ -117,6 +117,25 @@ class BinaryTree{
       }
     }
 
+    void insertAfter(Node* node, Node* newNode) {
+      if (!(node->hasRightChild())) {
+        node->right = newNode;
+      }
+      else {
+        Node* nextNode = subTreeFirst(node->right);
+        nextNode->left = newNode;
+      }
+    }
+
+    void insertBefore(Node* node, Node* newNode) {
+      if (!(node->hasLeftChild())) {
+        node->left = newNode;
+      }else {
+        Node* prevNode = subTreeLast(node->left);
+        prevNode->right = newNode;
+      }
+    }
+
     Node* findItem(int item) {
       return findItem(root, item);
     }
