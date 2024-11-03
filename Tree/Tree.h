@@ -46,6 +46,29 @@ class Node{
       return left == nullptr && right == nullptr;
     }
 
+    bool isRoot() {
+      return parent == nullptr;
+    }
+
+    bool isLeftChild() {
+      if (isRoot()) {
+        return false;
+      }
+      else {
+        return parent->left->item == item;
+      }
+    }
+
+    bool isRightChild() {
+      if (isRoot()) {
+        return false;
+      }
+      else {
+        return parent->right->item == item;
+      }
+    }
+
+
 };
 
 
@@ -118,26 +141,68 @@ class BinaryTree{
     }
 
     void insertAfter(Node* node, Node* newNode) {
-      if (!(node->hasRightChild())) {
+      if (!node->hasRightChild()) {
         node->right = newNode;
-      }
-      else {
+        newNode->parent = node;
+      } else {
         Node* nextNode = subTreeFirst(node->right);
         nextNode->left = newNode;
+        newNode->parent = nextNode;
       }
     }
 
     void insertBefore(Node* node, Node* newNode) {
-      if (!(node->hasLeftChild())) {
+      if (!node->hasLeftChild()) {
         node->left = newNode;
-      }else {
+        newNode->parent = node;
+      } else {
         Node* prevNode = subTreeLast(node->left);
         prevNode->right = newNode;
+        newNode->parent = prevNode;
       }
     }
+    int deleteNode(Node* node) {
+      if (node == nullptr) {
+        return -1;
+      }
+      int item = node->item;
 
-    Node* findItem(int item) {
-      return findItem(root, item);
+      if (node->isLeaf()) {
+        if (node->isRoot()) { 
+          delete node;
+          root = nullptr;
+        }
+        else {
+          Node* tempParent = node->parent;
+          bool isLeft = node->isLeftChild();
+          delete node;
+          if (isLeft) {
+            tempParent->left = nullptr;
+          }
+          else {
+            tempParent->right = nullptr;
+          }
+        }
+        return item;
+      }
+      else {
+        if (node->hasLeftChild()) {
+          Node* prev = predecessor(node);
+          // cout << "predecessor "  << "of " << node->item << " -> " << prev->item << endl;
+          swap(node->item, prev->item);
+          deleteNode(prev);
+        }
+        else {
+          Node* next = successor(node);
+          swap(node->item, next->item);
+          deleteNode(next);
+        }
+        return item;
+      } 
+    }
+
+    Node* findNode(int item) {
+      return findNode(root, item);
     }
 
     bool hasPredecessor(Node* node) {
@@ -145,13 +210,13 @@ class BinaryTree{
     }
 
     bool hasSuccessor(Node* node) {
-      return successor(root) != nullptr;
+      return successor(node) != nullptr;
     }
 
     friend ostream& operator<<(ostream& out,const BinaryTree& tree);
 
     ~BinaryTree() {
-      deleteNode(root);
+      deleteTree(root);
     }
 
   private:
@@ -165,23 +230,23 @@ class BinaryTree{
       }
     }
 
-    void deleteNode(Node* node) {
+    void deleteTree(Node* node) {
       if (node == nullptr) {
         return;
       } else {
-        deleteNode(node->left);
-        deleteNode(node->right);
+        deleteTree(node->left);
+        deleteTree(node->right);
         delete node;
       }
     }
 
-    Node* findItem(Node* root, int item) {
+    Node* findNode(Node* root, int item) {
       if (root == nullptr || root->item == item) {
         return root;
       }
       else {
-        Node* left = findItem(root->left, item);
-        Node* right = findItem(root->right, item);
+        Node* left = findNode(root->left, item);
+        Node* right = findNode(root->right, item);
         if (left != nullptr) {
           return left;
         }
