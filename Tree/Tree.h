@@ -47,13 +47,6 @@ class Node{
 			return parent == nullptr;
 		}
 		
-		bool isLeftChild() {
-			return parent->left->item == item;
-		}
-
-		bool isRightChild() {
-			return parent->right->item == item;
-		}
 
 		friend ostream& operator<<(ostream& out, Node* node);
 };
@@ -194,7 +187,7 @@ class BinaryTree {
 					root = nullptr;
 					return item;
 				}
-				if (node->parent && node->parent->left == node) {
+				if (node->parent->left == node) {
 					node->parent->left = nullptr;
 				} else {
 					node->parent->right = nullptr;

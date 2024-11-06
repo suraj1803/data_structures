@@ -11,22 +11,22 @@ int main() {
 	BinaryTree tree(root);
 	tree.print();
 
-	tree.subTreeFirstTest(root);
-	tree.subTreeLastTest(root);
-  tree.successorTest(root);
-	tree.predecessorTest(root);
-
-	while(true) {
-		int item;
-		cout << "Enter the node before you want to insert: ";
-		cin >> item;
-		Node* node = tree.find(item);
-		cout << "Enter the node you want to insert: ";
-		cin >> item;
-		Node* newNode = new Node(item);
-		tree.insertBefore(node, newNode);
-		tree.print();
-	}
+	// tree.subTreeFirstTest(root);
+	// tree.subTreeLastTest(root);
+ //  tree.successorTest(root);
+	// tree.predecessorTest(root);
+	//
+	// while(true) {
+	// 	int item;
+	// 	cout << "Enter the node before you want to insert: ";
+	// 	cin >> item;
+	// 	Node* node = tree.find(item);
+	// 	cout << "Enter the node you want to insert: ";
+	// 	cin >> item;
+	// 	Node* newNode = new Node(item);
+	// 	tree.insertBefore(node, newNode);
+	// 	tree.print();
+	// }
 	
 	while(true) {
 		int item;
