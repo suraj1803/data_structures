@@ -46,6 +46,14 @@ class Node{
 		bool isRoot() {
 			return parent == nullptr;
 		}
+		
+		bool isLeftChild() {
+			return parent->left->item == item;
+		}
+
+		bool isRightChild() {
+			return parent->right->item == item;
+		}
 
 		friend ostream& operator<<(ostream& out, Node* node);
 };
@@ -100,8 +108,7 @@ class BinaryTree {
 				Node* res = subTreeLast(node);
 				cout << "SubTreeLast of " << node  << " is " << res << endl;
 				subTreeLastTest(node->left);
-				subTreeLastTest(node->right);
-			}
+				subTreeLastTest(node->right); }
 		}
 
 		Node* successor(Node* node) {
@@ -112,11 +119,8 @@ class BinaryTree {
 				return subTreeFirst(node->right);
 			}
 			else {
-				while (node != node->parent->left) {
+				while (node->parent && node != node->parent->left) {
 					node = node->parent;
-          if (node->parent == nullptr) {
-            return nullptr;
-          }
 				}
 				return node->parent;
 			}
@@ -133,6 +137,86 @@ class BinaryTree {
       }
     }
 
+		Node* predecessor(Node* node) {
+			if (node == nullptr) {
+				return nullptr;
+			}
+			else if (node->hasLeftChild()) {
+				return subTreeLast(node->left);
+			}
+			else {
+				while (node->parent && node != node->parent->right) {
+					node = node->parent;
+				}
+				return node->parent;
+			}
+		}
+
+		void predecessorTest(Node* node) {
+			if (node == nullptr) {
+				return;
+			}
+			else {
+				cout << "Predecessor of " << node << " " << predecessor(node) << endl;
+				predecessorTest(node->left);
+				predecessorTest(node->right);
+			}
+		}
+
+		void insertAfter(Node* node, Node* newNode) {
+			if (!(node->hasRightChild())) {
+				node->right = newNode;
+			}
+			else {
+				Node* temp = subTreeFirst(node->right);
+				temp->left = newNode;
+			}
+		}
+
+		void insertBefore(Node* node, Node* newNode) {
+			if (!(node->hasLeftChild())) {
+				node->left = newNode;
+			}
+			else {
+				Node* temp = subTreeLast(node->left);
+				temp->right = newNode;
+			}
+		}
+
+		int deleteNode(Node* node) {
+			if (node == nullptr) {
+				return -1;
+			}
+			if (node->isLeaf()) {
+				int item = node->item;
+				if (node->isRoot()) {
+					delete node;
+					root = nullptr;
+					return item;
+				}
+				if (node->parent && node->parent->left == node) {
+					node->parent->left = nullptr;
+				} else {
+					node->parent->right = nullptr;
+				}
+				delete node;
+				return item;
+			}
+			else {
+				Node* temp;
+				if (node->hasLeftChild()) {
+					temp = predecessor(node);
+				}
+				else {
+					temp = successor(node);
+				}
+				int t = node->item;
+				node->item = temp->item;
+				temp->item = t;
+				return deleteNode(temp);
+			}
+		}
+
     Node* find(int key) {
       return find(root, key);
     }
@@ -145,6 +229,7 @@ class BinaryTree {
 		~BinaryTree() {
 			deleteTree(root);
 		}
+
 
 	private:
     Node* find(Node* root, int key) {
