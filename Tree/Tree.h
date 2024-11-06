@@ -46,7 +46,7 @@ class Node{
 		bool isRoot() {
 			return parent == nullptr;
 		}
-		
+
 
 		friend ostream& operator<<(ostream& out, Node* node);
 };
@@ -60,12 +60,33 @@ inline ostream& operator<<(ostream& out, Node* node) {
 }
 
 class BinaryTree {
-  private:
-    Node* root;
+	private:
+		Node* root;
 
 	public:
 		BinaryTree(Node* root) {
 			this->root = root;
+		}
+
+		BinaryTree(int arr[], int size) {
+			root = buildTree(arr, 0, size - 1);
+		}
+
+		Node* buildTree(int arr[], int i, int j) {
+			if (i > j) {
+				return nullptr;
+			}
+			int mid = (i + j) / 2;
+			Node* root = new Node(arr[mid]);
+			root->left = buildTree(arr, i, mid - 1);
+			if (root->left != nullptr)
+				root->left->parent = root;
+
+			root->right = buildTree(arr, mid + 1, j);
+			if (root->right != nullptr)
+				root->right->parent = root;
+
+			return root;
 		}
 
 		Node* subTreeFirst(Node* node) {
@@ -119,16 +140,16 @@ class BinaryTree {
 			}
 		}
 
-    void successorTest(Node* node) {
-      if (node == nullptr) {
-        return;
-      }
-      else {
-        cout << "Successor of " << node << " " << successor(node) << endl;
-        successorTest(node->left);
-        successorTest(node->right);
-      }
-    }
+		void successorTest(Node* node) {
+			if (node == nullptr) {
+				return;
+			}
+			else {
+				cout << "Successor of " << node << " " << successor(node) << endl;
+				successorTest(node->left);
+				successorTest(node->right);
+			}
+		}
 
 		Node* predecessor(Node* node) {
 			if (node == nullptr) {
@@ -210,10 +231,10 @@ class BinaryTree {
 			}
 		}
 
-    Node* find(int key) {
-      return find(root, key);
-    }
-  
+		Node* find(int key) {
+			return find(root, key);
+		}
+
 		void print() {
 			print(root);
 			cout << endl;
@@ -225,20 +246,20 @@ class BinaryTree {
 
 
 	private:
-    Node* find(Node* root, int key) {
-      if (root == nullptr || root->item == key) {
-        return root;
-      } else {
-        Node* left = find(root->left, key);
-        Node* right = find(root->right, key);
-        if (left != nullptr) {
-          return left;
-        }
-        else {
-          return right;
-        }
-      }
-    }
+		Node* find(Node* root, int key) {
+			if (root == nullptr || root->item == key) {
+				return root;
+			} else {
+				Node* left = find(root->left, key);
+				Node* right = find(root->right, key);
+				if (left != nullptr) {
+					return left;
+				}
+				else {
+					return right;
+				}
+			}
+		}
 
 		void print(Node* root) {
 			if (root == nullptr) {
