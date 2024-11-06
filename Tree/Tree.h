@@ -59,9 +59,10 @@ inline ostream& operator<<(ostream& out, Node* node) {
 }
 
 class BinaryTree {
-		
+  private:
+    Node* root;
+
 	public:
-		Node* root;
 		BinaryTree(Node* root) {
 			this->root = root;
 		}
@@ -103,31 +104,39 @@ class BinaryTree {
 			}
 		}
 
-		Node* succcessor(Node* node) {
+		Node* successor(Node* node) {
 			if (node == nullptr){
 				return nullptr;
 			}
 			else if (node->hasRightChild()){
 				return subTreeFirst(node->right);
 			}
-			else if (node->isRoot()){
-				return nullptr;
-			}
 			else {
-				while (node->parent->left != node) {
+				while (node != node->parent->left) {
 					node = node->parent;
+          if (node->parent == nullptr) {
+            return nullptr;
+          }
 				}
-				return node;
+				return node->parent;
 			}
 		}
 
-		// Node* find(int item) {
-		// 	if (root == nullptr) {
-		//
-		// 	}
-		// }
+    void successorTest(Node* node) {
+      if (node == nullptr) {
+        return;
+      }
+      else {
+        cout << "Successor of " << node << " " << successor(node) << endl;
+        successorTest(node->left);
+        successorTest(node->right);
+      }
+    }
 
-
+    Node* find(int key) {
+      return find(root, key);
+    }
+  
 		void print() {
 			print(root);
 			cout << endl;
@@ -138,6 +147,21 @@ class BinaryTree {
 		}
 
 	private:
+    Node* find(Node* root, int key) {
+      if (root == nullptr || root->item == key) {
+        return root;
+      } else {
+        Node* left = find(root->left, key);
+        Node* right = find(root->right, key);
+        if (left != nullptr) {
+          return left;
+        }
+        else {
+          return right;
+        }
+      }
+    }
+
 		void print(Node* root) {
 			if (root == nullptr) {
 				return;

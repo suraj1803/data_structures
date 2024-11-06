@@ -10,16 +10,10 @@ int main() {
 	Node* root = new Node(node1, 4, node2);
 	BinaryTree tree(root);
 	tree.print();
-	// int item;
-	// cin >> item;
-	Node* node = tree.subTreeFirst(root);
-	cout << node << endl;
-	// cin >> item;
-	node = tree.subTreeLast(root);
-	cout << node << endl;
 
 	tree.subTreeFirstTest(root);
 	tree.subTreeLastTest(root);
+  tree.successorTest(root);
 
 	return 0;
 }
